@@ -3,7 +3,8 @@ import * as url from 'url';
 const __dirname = url.fileURLToPath(new URL('.',import.meta.url));
 
 import cors from 'cors';
-import {router} from '../routes/usuarios.js';
+import {router as routerUsuarios} from '../routes/usuarios.js';
+import {router as routerAuth} from '../routes/auth.js';
 import { dbConnection } from '../database/config.js';
 
 
@@ -12,6 +13,7 @@ class Server{
       this.app = express();
       this.port = process.env.PORT;
       this.usuariosPath = '/api/usuarios';
+      this.authPath = '/api/auth';
 
       //Conectar a base de datos
       this.conectarDB();
@@ -39,8 +41,9 @@ class Server{
    }
 
    routes(){
-      
-      this.app.use(this.usuariosPath, router);
+      this.app.use(this.authPath,routerAuth);
+
+      this.app.use(this.usuariosPath, routerUsuarios);
       
    }
    listen(){
